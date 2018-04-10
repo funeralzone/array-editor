@@ -30,4 +30,13 @@ class FindByArrayItemProperty implements Finder
         }
         return $matchingIndex;
     }
+
+    public function toString(): string
+    {
+        return sprintf(
+            '[%s] = %s',
+            $this->propertyName,
+            $this->propertyValue
+        );
+    }
 }

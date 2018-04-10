@@ -46,20 +46,12 @@ final class Editor
         return $scope;
     }
 
-    public function edit(array $path, $newValue): void
-    {
-        $data = &$this->get($path);
-        $data = $newValue;
-
-        return;
-    }
-
-    public function insertArrayItem(array $path, $newValue, $index = null): void
+    public function add(array $path, $newValue, $key = null): void
     {
         $data = &$this->get($path);
         if (is_array($data)) {
-            if ($index) {
-                $data[$index] = $newValue;
+            if ($key) {
+                $data[$key] = $newValue;
             } else {
                 $data[] = $newValue;
             }
@@ -70,22 +62,37 @@ final class Editor
         return;
     }
 
-    public function editArrayItem(array $parentPath, $newValue): void
+    public function edit(array $path, $newValue): void
     {
-        $data = &$this->get($parentPath);
+        $data = &$this->get($path);
         $data = $newValue;
 
         return;
     }
 
-    public function deleteArrayItem(array $parentPath, Finder $arrayIndexFinder): void
+    public function delete(array $path): void
     {
-        $data = &$this->get($parentPath);
-        if (is_array($data)) {
-            $index = $this->findArrayItemIndex($data, $arrayIndexFinder);
-            unset($data[$index]);
+        $targetPathItem = array_pop($path);
+        if (count($path)) {
+            $data = &$this->get($path);
         } else {
-            throw new PathIsNotAnArray($parentPath);
+            $data = &$this->data;
+        }
+
+        if (is_array($data)) {
+            if ($targetPathItem instanceof Finder) {
+                $index = $this->findArrayItemIndex($data, $targetPathItem);
+            } else {
+                $index = $targetPathItem;
+            }
+
+            if (array_key_exists($index, $data)) {
+                unset($data[$index]);
+            } else {
+                throw new InvalidArrayIndex();
+            }
+        } else {
+            throw new PathIsNotAnArray($path);
         }
 
         return;
