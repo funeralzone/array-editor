@@ -1,0 +1,22 @@
+{
+  "name": "funeralzone/array-editor",
+  "description": "A PHP 7.1 helper library that lets you edit values within nested arrays.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "James Sanders",
+      "email": "contact@jsanders.uk"
+    }
+  ],
+  "require": {
+    "php": "^7.1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Funeralzone\\ArrayEditor\\": "src/"
+    }
+  }
+}
