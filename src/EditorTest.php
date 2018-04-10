@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Funeralzone\ArrayEditor;
 
 use Funeralzone\ArrayEditor\ArrayIndexFinders\Finder;
-use Mockery\Mock;
 use PHPUnit\Framework\TestCase;
 
 final class EditorTest extends TestCase
