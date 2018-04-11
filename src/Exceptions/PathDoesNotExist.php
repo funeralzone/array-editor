@@ -8,8 +8,8 @@ use \Exception;
 
 class PathDoesNotExist extends Exception
 {
-    public function __construct(array $path)
+    public function __construct()
     {
-        parent::__construct(sprintf('Path "%s" does not exist', implode('/', $path)));
+        parent::__construct('Path does not exist');
     }
 }

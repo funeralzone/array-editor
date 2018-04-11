@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Funeralzone\ArrayEditor;
 
-use Funeralzone\ArrayEditor\ArrayIndexFinders\Finder;
+use \Throwable;
 use Funeralzone\ArrayEditor\Exceptions\ArrayIndexNotFound;
-use Funeralzone\ArrayEditor\Exceptions\InvalidArrayIndex;
+use Funeralzone\ArrayEditor\Exceptions\CallableRaisedError;
 use Funeralzone\ArrayEditor\Exceptions\PathDoesNotExist;
 use Funeralzone\ArrayEditor\Exceptions\PathIsNotAnArray;
 
@@ -31,16 +31,8 @@ final class Editor
         while ($pathElementsToIterateOver) {
             $pathItem = array_shift($pathElementsToIterateOver);
 
-            if ($pathItem instanceof Finder) {
-                $index = $this->findArrayItemIndex($scope, $pathItem);
-                $scope = &$scope[$index];
-            } else {
-                if (is_array($scope) && array_key_exists($pathItem, $scope)) {
-                    $scope = &$scope[$pathItem];
-                } else {
-                    throw new PathDoesNotExist($path);
-                }
-            }
+            $index = $this->findArrayItemIndex($scope, $pathItem);
+            $scope = &$scope[$index];
         }
 
         return $scope;
@@ -56,7 +48,7 @@ final class Editor
                 $data[] = $newValue;
             }
         } else {
-            throw new PathIsNotAnArray($path);
+            throw new PathIsNotAnArray();
         }
 
         return;
@@ -80,32 +72,32 @@ final class Editor
         }
 
         if (is_array($data)) {
-            if ($targetPathItem instanceof Finder) {
-                $index = $this->findArrayItemIndex($data, $targetPathItem);
-            } else {
-                $index = $targetPathItem;
-            }
-
-            if (array_key_exists($index, $data)) {
-                unset($data[$index]);
-            } else {
-                throw new InvalidArrayIndex();
-            }
+            $index = $this->findArrayItemIndex($data, $targetPathItem);
+            unset($data[$index]);
         } else {
-            throw new PathIsNotAnArray($path);
+            throw new PathIsNotAnArray();
         }
 
         return;
     }
 
-    private function findArrayItemIndex(array $data, Finder $arrayIndexFinder)
+    private function findArrayItemIndex(array $data, $element)
     {
-        $index = $arrayIndexFinder->findArrayIndex($data);
+        if (is_callable($element)) {
+            try {
+                $index = call_user_func($element, $data);
+            } catch (Throwable $e) {
+                throw new CallableRaisedError();
+            }
+        } else {
+            $index = $element;
+        }
+
         if ($index !== null) {
             if (array_key_exists($index, $data)) {
                 return $index;
             } else {
-                throw new InvalidArrayIndex();
+                throw new PathDoesNotExist();
             }
         } else {
             throw new ArrayIndexNotFound();

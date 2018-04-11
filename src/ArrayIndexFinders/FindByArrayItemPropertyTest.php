@@ -21,7 +21,7 @@ final class FindByArrayItemPropertyTest extends TestCase
 
         $finder = new FindByArrayItemProperty('id', 2);
 
-        $index = $finder->findArrayIndex($data);
+        $index = $finder($data);
 
         $this->assertEquals(1, $index);
     }
@@ -36,7 +36,7 @@ final class FindByArrayItemPropertyTest extends TestCase
 
         $finder = new FindByArrayItemProperty('key', 2);
 
-        $index = $finder->findArrayIndex($data);
+        $index = $finder($data);
 
         $this->assertNull($index);
     }
@@ -50,7 +50,7 @@ final class FindByArrayItemPropertyTest extends TestCase
 
         $finder = new FindByArrayItemProperty('id', 2);
 
-        $index = $finder->findArrayIndex($data);
+        $index = $finder($data);
 
         $this->assertNull($index);
     }

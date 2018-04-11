@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Funeralzone\ArrayEditor\ArrayIndexFinders;
 
-class FindByArrayItemProperty implements Finder
+class FindByArrayItemProperty
 {
     private $propertyName;
     private $propertyValue;
@@ -15,7 +15,7 @@ class FindByArrayItemProperty implements Finder
         $this->propertyValue = $propertyValue;
     }
 
-    public function findArrayIndex(array $items)
+    public function __invoke(array $items)
     {
         $matchingIndex = null;
         foreach ($items as $index => $item) {
@@ -29,14 +29,5 @@ class FindByArrayItemProperty implements Finder
             }
         }
         return $matchingIndex;
-    }
-
-    public function __toString(): string
-    {
-        return sprintf(
-            '{[%s] = %s}',
-            $this->propertyName,
-            $this->propertyValue
-        );
     }
 }

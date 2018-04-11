@@ -8,8 +8,8 @@ use \Exception;
 
 class PathIsNotAnArray extends Exception
 {
-    public function __construct(array $path)
+    public function __construct()
     {
-        parent::__construct(sprintf('The value at "%s" is not an array', implode('/', $path)));
+        parent::__construct('The path is not an array');
     }
 }
