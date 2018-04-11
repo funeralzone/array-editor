@@ -7,5 +7,5 @@ namespace Funeralzone\ArrayEditor\ArrayIndexFinders;
 interface Finder
 {
     public function findArrayIndex(array $items);
-    public function toString(): string;
+    public function __toString(): string;
 }
