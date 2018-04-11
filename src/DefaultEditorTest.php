@@ -11,16 +11,16 @@ use Funeralzone\ArrayEditor\Exceptions\PathDoesNotExist;
 use Funeralzone\ArrayEditor\Exceptions\PathIsNotAnArray;
 use PHPUnit\Framework\TestCase;
 
-final class EditorTest extends TestCase
+final class DefaultEditorTest extends TestCase
 {
-    /** @var Editor $editor */
+    /** @var DefaultArrayEditor $editor */
     private $editor;
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->editor = new Editor([
+        $this->editor = new DefaultArrayEditor([
             'simpleValue' => 'ROOT VALUE',
             'simpleArray' => [
                 'subValue' => 'SUB VALUE'

@@ -10,7 +10,7 @@ use Funeralzone\ArrayEditor\Exceptions\CallableRaisedError;
 use Funeralzone\ArrayEditor\Exceptions\PathDoesNotExist;
 use Funeralzone\ArrayEditor\Exceptions\PathIsNotAnArray;
 
-final class Editor
+final class DefaultArrayEditor implements ArrayEditor
 {
     private $data;
 
