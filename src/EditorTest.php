@@ -7,12 +7,14 @@ declare(strict_types=1);
 namespace Funeralzone\ArrayEditor;
 
 use Funeralzone\ArrayEditor\ArrayIndexFinders\Finder;
+use Funeralzone\ArrayEditor\Exceptions\ArrayIndexNotFound;
+use Funeralzone\ArrayEditor\Exceptions\InvalidArrayIndex;
+use Funeralzone\ArrayEditor\Exceptions\PathDoesNotExist;
+use Funeralzone\ArrayEditor\Exceptions\PathIsNotAnArray;
 use PHPUnit\Framework\TestCase;
 
 final class EditorTest extends TestCase
 {
-    // TODO - test exceptions
-
     /** @var Editor $editor */
     private $editor;
 
@@ -199,5 +201,58 @@ final class EditorTest extends TestCase
         $this->assertArrayHasKey('simpleArray', $data);
         $this->assertCount(0, $data['simpleArray']);
         $this->assertArrayNotHasKey('subValue', $data['simpleArray']);
+    }
+
+    public function test_nonexistant_path_throws_pathdoesnotexist_exception()
+    {
+        $this->expectException(PathDoesNotExist::class);
+        $this->editor->get([
+            'invalid_path'
+        ]);
+    }
+
+    public function test_add_to_non_array_throws_pathisnotarray_exception()
+    {
+        $this->expectException(PathIsNotAnArray::class);
+        $this->editor->add(
+            [
+                'simpleArray',
+                'subValue'
+            ],
+            'value'
+        );
+    }
+
+    public function test_finder_returning_invalid_index_throws_invalidarrayindex_exception()
+    {
+        $this->expectException(InvalidArrayIndex::class);
+
+        $mockFinder = \Mockery::mock(Finder::class);
+        $mockFinder->shouldReceive('findArrayIndex')
+            ->times(1)
+            ->andReturn('invalidIndex');
+
+        $this->editor->get(
+            [
+                'simpleArray',
+                $mockFinder
+            ]
+        );
+    }
+    public function test_finder_failing_to_find_index_throws_arrayindexnotfound_exception()
+    {
+        $this->expectException(ArrayIndexNotFound::class);
+
+        $mockFinder = \Mockery::mock(Finder::class);
+        $mockFinder->shouldReceive('findArrayIndex')
+            ->times(1)
+            ->andReturn(null);
+
+        $this->editor->get(
+            [
+                'simpleArray',
+                $mockFinder
+            ]
+        );
     }
 }
