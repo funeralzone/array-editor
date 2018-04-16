@@ -54,10 +54,18 @@ final class DefaultArrayEditor implements ArrayEditor
         return;
     }
 
-    public function edit(array $path, $newValue): void
+    public function replace(array $path, $newValue): void
     {
         $data = &$this->get($path);
         $data = $newValue;
+
+        return;
+    }
+
+    public function merge(array $path, array $newValues): void
+    {
+        $data = &$this->get($path);
+        $data = array_merge($data, $newValues);
 
         return;
     }
